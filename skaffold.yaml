@@ -2,7 +2,7 @@ apiVersion: skaffold/v2alpha3
 kind: Config
 build:
   artifacts:
-    - image: registry.gitlab.comvictorfgomees/projeto_final_devops/tasks:latest
+    - image: registry.gitlab.com/victorfgomees/projeto_final_devops/tasks:latest
       context: ./tasks
       docker:
         dockerfile: Dockerfile

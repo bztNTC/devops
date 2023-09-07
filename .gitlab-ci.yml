@@ -5,9 +5,10 @@ stages:
 
 variables:
   DOCKER_DRIVER: overlay2
-
 before_script:
+  - apk add --no-cache docker
   - echo "$docker_token" | docker login -u "$docker_id" --password-stdin $CI_REGISTRY
+
 
 build:
   stage: build

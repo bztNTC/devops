@@ -1,0 +1,12 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+build:
+  artifacts:
+    - image: projeto_final_devops/app
+      context: ./app
+      docker:
+        Dockerfile: Dockerfile
+deploy:
+  kubectl:
+    manifests:
+      - kubernetes-specifications/*.yaml

@@ -21,6 +21,11 @@ services:
     networks:
       - back-tier
 
+  redis:
+    image: redis:alpine
+    networks:
+      - back-tier
+
   db:
     image: postgres:15-alpine
     environment:

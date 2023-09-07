@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Lista de Tarefas</title>
+  <base href="/index.html">
+  <link rel='stylesheet' href="{{ url_for('static', filename='stylesheets/style.css') }}" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+
+    #content-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #content-container-center {
+      text-align: center;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    #task-form {
+      margin-top: 20px;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .add-task {
+      background-color: #333;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .add-task:hover {
+      background-color: #555;
+    }
+
+    #success-message {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    #success-message button {
+      background-color: transparent;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    #success-message button:hover {
+      text-decoration: underline;
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: #333;
+      color: #fff;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      background-color: #555;
+    }
+
+    /* Estilos CSS adicionais aqui... */
+  </style>
+</head>
+<body>
+  <div id="content-container">
+    <div id="content-container-center">
+      <h3>Lista de Tarefas</h3>
+      <form id="task-form" name="form" method="POST" action="/">
+        <input type="text" name="task_title" placeholder="Título da Tarefa" required>
+        <textarea name="task_description" placeholder="Descrição da Tarefa"></textarea>
+        <button type="submit" class="add-task">Adicionar Tarefa</button>
+      </form>
+      <!-- Mensagem de sucesso (inicialmente oculta) -->
+      <div id="success-message" style="display: none;">
+        {{ success_message }}
+        <button onclick="closeSuccessMessage()">Fechar</button>
+      </div>
+      <!-- Botão de redirecionamento -->
+      <a href="http://localhost:5001" class="btn btn-primary">Clique aqui para ir para sua lista de tarefas</a>
+    </div>
+  </div>
+  <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+  <script>
+    // Função para buscar e exibir a lista de tarefas
+    function fetchAndDisplayTasks() {
+      $.get('/tasks', function (data) {
+        var tasks = JSON.parse(data);
+        var taskList = $('#task-list');
+        taskList.empty(); // Limpa a lista atual
+        tasks.forEach(function (task) {
+          var taskDiv = $('<div class="task"></div>');
+          taskDiv.append('<input type="checkbox" class="task-checkbox"' + (task.completed ? ' checked' : '') + '>');
+          taskDiv.append('<span class="task-title">' + task.title + '</span>');
+          taskDiv.append('<p class="task-description">' + task.description + '</p>');
+          taskList.append(taskDiv);
+        });
+      });
+    }
+
+    // Atualiza a lista de tarefas quando a página carrega
+    $(document).ready(function () {
+      fetchAndDisplayTasks();
+    });
+
+    // Submeta o formulário e atualize a lista de tarefas
+    $('#task-form').submit(function (event) {
+      event.preventDefault();
+      $.post('/', $(this).serialize(), function () {
+        fetchAndDisplayTasks(); // Após adicionar a tarefa, atualiza a lista
+        $('#success-message').text('Tarefa adicionada com sucesso.').show(); // Exibe a mensagem de sucesso
+        setTimeout(function () {
+          $('#success-message').fadeOut('slow'); // Oculta a mensagem de sucesso após alguns segundos
+        }, 3000);
+      });
+      this.reset();
+    });
+
+    
+    // Função para fechar a mensagem de sucesso
+    function closeSuccessMessage() {
+      $('#success-message').fadeOut('slow'); // Oculta a mensagem de sucesso
+    }
+  </script>
+</body>
+</html>

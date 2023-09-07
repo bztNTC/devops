@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: tasks
+  name: tasks
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tasks
+  template:
+    metadata:
+      labels:
+        app: tasks
+    spec:
+      containers:
+      - image: projeto_final_devops/projeto_final_task
+        name: tasks
+        ports:
+        - containerPort: 80
+          name: tasks

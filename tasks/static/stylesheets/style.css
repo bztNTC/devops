@@ -1,0 +1,68 @@
+@import url(//fonts.googleapis.com/css?family=Open+Sans:400,700,600);
+
+*{
+  box-sizing:border-box;
+}
+/* Atualize as cores de fundo para um esquema de cores mais adequado às tarefas */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #FFFFFF; /* Cor de fundo mais clara */
+  height: 100vh;
+  font-family: 'Open Sans';
+}
+
+/* Atualize os estilos dos botões */
+button[type="submit"] {
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+  border-radius: 5px; /* Adicione bordas arredondadas para botões */
+  width: auto; /* Ajuste a largura dos botões para o conteúdo interno */
+  height: auto; /* Ajuste a altura dos botões para o conteúdo interno */
+  padding: 10px 20px; /* Espaçamento interno dos botões */
+}
+
+/* Atualize os estilos das cores dos botões */
+button.a {
+  background-color: #4CAF50; /* Cor verde para tarefas concluídas */
+}
+
+button.b {
+  background-color: #FF5722; /* Cor laranja para tarefas não concluídas */
+}
+
+/* Atualize o estilo do ID do usuário */
+#user-id {
+  position: absolute;
+  bottom: 10px; /* Ajuste a posição inferior para evitar sobreposição com o conteúdo */
+  right: 10px; /* Ajuste a posição direita para evitar sobreposição com o conteúdo */
+  color: #333; /* Cor de texto mais escura */
+  font-size: 14px;
+  font-weight: bold; /* Texto em negrito */
+}
+
+/* Atualize os estilos para a lista de tarefas */
+#task-list {
+  margin-top: 20px; /* Espaçamento superior para a lista de tarefas */
+}
+
+.task {
+  border: 1px solid #EEE; /* Adicione uma borda a cada tarefa */
+  padding: 10px; /* Espaçamento interno para cada tarefa */
+  margin-bottom: 10px; /* Espaçamento inferior entre tarefas */
+}
+
+.task-checkbox {
+  margin-right: 10px; /* Espaçamento direito para o checkbox */
+  vertical-align: middle; /* Alinhe verticalmente o checkbox */
+}
+
+.task-title {
+  font-weight: bold; /* Título da tarefa em negrito */
+}
+
+.task-description {
+  color: #777; /* Cor de texto mais clara para a descrição */
+}
+
+<div id="success-message" style="display: none;"></div>

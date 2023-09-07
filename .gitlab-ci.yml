@@ -5,7 +5,11 @@ stages:
   
 test:
   stage: test
+  image: docker:latest
   script:
+    - docker build -t $DOCKER_ID/result-img ./result
+    - docker build -t $DOCKER_ID/worker-img ./worker
+    - docker build -t $DOCKER_ID/task-img ./task
     - docker-compose -f docker-compose.test.yml up --abort-on-container-exit
 
 deploy:

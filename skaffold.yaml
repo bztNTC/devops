@@ -5,7 +5,6 @@ build:
     - image: projeto_final_devops/app
       context: ./app
       docker:
-        Dockerfile: Dockerfile
 deploy:
   kubectl:
     manifests:

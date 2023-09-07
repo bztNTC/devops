@@ -103,11 +103,21 @@
 
   async function markTaskAsCompleted(taskId) {
     try {
-      await fetch(`/completeTask/${taskId}`, {
-        method: "POST",
+      await fetch(`/updateCompletion/${taskId}/True`, {
+        method: "PUT",
       });
     } catch (error) {
       console.error("Erro ao marcar a tarefa como concluída:", error);
+    }
+  }
+
+  async function markTaskAsNotCompleted(taskId) {
+    try {
+      await fetch(`/updateCompletion/${taskId}/False`, {
+        method: "PUT",
+      });
+    } catch (error) {
+      console.error("Erro ao marcar a tarefa como não concluída:", error);
     }
   }
 
@@ -136,11 +146,8 @@
         taskItem.classList.remove("todo");
         taskItem.classList.add("completed");
         completeButton.textContent = "Desfazer";
-
-        
         completedTaskContainer.appendChild(taskItem);
 
-        
         await markTaskAsCompleted(task.id);
       } else {
         
@@ -150,9 +157,9 @@
 
         
         incompleteTaskContainer.appendChild(taskItem);
+        await markTaskAsNotCompleted(task.id);
       }
     });
-
     taskButtons.appendChild(completeButton);
     taskItem.appendChild(taskButtons);
 

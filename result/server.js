@@ -1,4 +1,3 @@
-
 var express = require('express'),
     async = require('async'),
     pg = require('pg'),
@@ -84,16 +83,47 @@ function handleGetTasks(res ){
 
 app.get("/getTasks", function (req, res) {
   handleGetTasks(res )
-  // const result = handleGetTasks().then(console.log)
-  // console.log(result)
-  // try{
-  //   // res.json(getTasks())
-    // res.end(JSON.stringify({ a: 1 }));
-  // }
 
-  // catch(err){
-  //   console.log(err)    
-  // }
+})
+
+function updateCompletion(client, res, taskId, value) {
+  client.query('UPDATE tasks SET completed = $2 WHERE id = $1', [taskId, value], function(err, result) {
+    if (err) {
+      console.error("Error performing query: " + err);
+    } else {
+      if(res){
+        res.end(JSON.stringify({data:result.rows}));
+      }
+    }
+
+    setTimeout(function() {updateCompletion(client, res, taskId, value)}, 1000);
+  });
+}
+
+function handleUpdateCompletion(res, taskId, value){
+  async.retry(
+    {times: 1000, interval: 1000},
+    function(callback) {
+      pool.connect(function(err, client, done) {
+        if (err) {
+          console.error("Waiting for db");
+        }
+        callback(err, client);
+      });
+    },
+    function(err, client) {
+      if (err) {
+        return console.error("Giving up");
+      }
+      console.log("Connected to db");
+      updateCompletion(client, res, taskId, value);
+    }
+  );
+}
+
+app.put("/updateCompletion/:taskId/:value", function (req, res){
+  const {taskId, value} = req.params
+  handleUpdateCompletion(res, taskId, value)
 })
 
 

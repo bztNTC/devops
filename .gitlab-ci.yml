@@ -1,0 +1,34 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+services:
+  - docker:dind
+
+before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+build:
+  stage: build
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+
+test:
+  stage: test
+  script:
+    - docker-compose -f docker-compose.test.yml up --abort-on-container-exit
+
+deploy:
+  stage: deploy
+  script:
+    - kubectl apply -f kubernetes-specifications/db-deployment.yaml
+    - kubectl apply -f kubernetes-specifications/result-deployment.yaml
+    - kubectl apply -f kubernetes-specifications/task-deployment.yaml
+    - kubectl apply -f kubernetes-specifications/worker-deployment.yaml
+  only:
+    - main
